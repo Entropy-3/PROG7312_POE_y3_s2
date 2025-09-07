@@ -46,6 +46,9 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Prog_Y3_S1_ST10249266.styles.css" asp-append-version="true" />
 </head>
+@{
+    var id = Context.Session.GetInt32("UserID");
+}
 <body>
     <header>
         <nav class="navbar navbar-expand-sm custom-navbar">
@@ -62,12 +65,16 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
+                        @if (id == null){
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>
                         </li>
-                        <li class="nav-item">
+                        }
+                        @if (id != null){
+                        <li class="nav-item" >
                             <a class="nav-link" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
                         </li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -8,14 +8,16 @@ namespace PROG7312_POE.Controllers
     {
         private readonly AppDbContext _context;
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-        
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         public AuthController(AppDbContext context)
         {
             _context = context;
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        public IActionResult Login()
+        {
+            return View();
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
