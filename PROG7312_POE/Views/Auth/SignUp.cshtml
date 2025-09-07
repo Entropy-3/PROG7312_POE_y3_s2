@@ -2,6 +2,12 @@
 }
 <head>
     <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
         .form {
             display: flex;
             flex-direction: column;
@@ -147,7 +153,7 @@
 
 @*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*@
 
-<body style="background-color: #1a1a1a;">
+<body>
     <div style="display: flex; justify-content: center; align-items: center; height: 75vh;">
         <form class="form" action="SignUp" method="post">
             <p class="title">Sign Up </p>
@@ -184,7 +190,7 @@
             <input type="hidden" name="Role" value="employee" />
 
             <button class="submit">Submit</button>
-            <p class="signin">have an account? <a href="@Url.Action("Login", "User")">Login</a> </p>
+            <p class="signin">have an account? <a href="@Url.Action("Login", "Auth")">Login</a> </p>
         </form>
     </div>
 </body>

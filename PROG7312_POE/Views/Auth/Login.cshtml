@@ -5,6 +5,12 @@
 }
 <head>
     <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
         .form {
             display: flex;
             flex-direction: column;
@@ -150,7 +156,7 @@
 
 @*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*@
 
-<body style="background-color: #1a1a1a;">
+<body>
 
     <div style="display: flex; justify-content: center; align-items: center; height: 75vh;">
         <form class="form" asp-controller="User" asp-action="Login" method="post">
@@ -177,7 +183,7 @@
 
 
             <button class="submit">Submit</button>
-            <p class="signin">Don't have an account ? <a href="@Url.Action("SignUp", "User")">Sign Up</a> </p>
+            <p class="signin">Don't have an account ? <a href="@Url.Action("SignUp", "Auth")">Sign Up</a> </p>
         </form>
     </div>
     @{
