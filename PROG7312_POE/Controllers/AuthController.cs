@@ -67,6 +67,30 @@ namespace PROG7312_POE.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
-        
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //method that checks to see if the user is in the database and if the password is correct
+        [HttpPost]
+        public IActionResult Login(string email, string Password)
+        {
+            email = email.ToLower();
+            //var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == Password);
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+
+            //if statement checks to see if user is in database as well as checks if the password is correct
+
+            if (user == null || !BCrypt.Net.BCrypt.Verify(Password, user.Password))
+            {
+                ModelState.AddModelError("Password", "Invalid email or password.");
+                return View();
+            }
+
+            //grabs the user information from the database into the session allowing it to be accessed throughout the application
+            HttpContext.Session.SetInt32("UserID", user.UserID);
+            HttpContext.Session.SetString("UserName", user.Name);
+
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
