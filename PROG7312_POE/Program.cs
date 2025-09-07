@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using PROG7312_POE.Models;
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//creates database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
 
 var app = builder.Build();
 

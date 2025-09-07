@@ -2,7 +2,7 @@
 
 namespace PROG7312_POE.Controllers
 {
-    public class IssueController : Controller
+    public class IssuesController : Controller
     {
         public IActionResult AddIssue()
         {
