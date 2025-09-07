@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PROG7312_POE.Models;
-using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +19,6 @@ builder.Services.AddSession(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,6 +33,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

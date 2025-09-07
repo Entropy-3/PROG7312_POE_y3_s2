@@ -1,5 +1,166 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Add Issue";
 }
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        .form {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            font-size: 24px;
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+        }
+
+        .input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background-color: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .submit, .next-btn {
+            border: none;
+            outline: none;
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #00bfff;
+            cursor: pointer;
+        }
+
+            .submit:hover, .next-btn:hover {
+                background-color: #00bfff96;
+            }
+
+        .stage {
+            display: none;
+        }
+
+            .stage.active {
+                display: block;
+            }
+
+        .progress-container {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 12px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #00bfff;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <p class="title">Add Issue</p>
+        <p class="message">Complete all stages to submit your issue.</p>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="issueForm" method="post" enctype="multipart/form-data">
+            <!-- Stage 1: Location -->
+            <div class="stage active" id="stage1">
+                <label>Issue Location</label>
+                <input class="input" type="text" name="Location" placeholder="Enter location" required>
+                <button type="button" class="next-btn" onclick="nextStage()">Next</button>
+            </div>
+
+            <!-- Stage 2: Category -->
+            <div class="stage" id="stage2">
+                <label>Issue Category</label>
+                <select class="input" name="Category" required>
+                    <option value="">Select category</option>
+                    <option value="Road">Road</option>
+                    <option value="Street Light">Street Light</option>
+                    <option value="Garbage">Garbage</option>
+                    <option value="Other">Other</option>
+                </select>
+                <button type="button" class="next-btn" onclick="nextStage()">Next</button>
+            </div>
+
+            <!-- Stage 3: Description -->
+            <div class="stage" id="stage3">
+                <label>Issue Description</label>
+                <textarea class="input" name="Description" rows="4" placeholder="Describe the issue" required></textarea>
+                <button type="button" class="next-btn" onclick="nextStage()">Next</button>
+            </div>
+
+            <!-- Stage 4: Attachments -->
+            <div class="stage" id="stage4">
+                <label>Attachments</label>
+                <input class="input" type="file" name="Attachments" multiple>
+                <button type="submit" class="submit">Submit Issue</button>
+            </div>
+        </form>
+    </div>
+
+	@* chat gpt assisted me with the cript for this in order to make it multi stage wihtout using multiple views *@
+    <script>
+        const stages = document.querySelectorAll('.stage');
+        const progressBar = document.getElementById('progressBar');
+        let currentStage = 0;
+
+        function nextStage() {
+            // Validate current stage inputs
+            const inputs = stages[currentStage].querySelectorAll('input, select, textarea');
+            for (let input of inputs) {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    return;
+                }
+            }
+
+            // Hide current stage
+            stages[currentStage].classList.remove('active');
+
+            // Move to next stage
+            currentStage++;
+            if (currentStage < stages.length) {
+                stages[currentStage].classList.add('active');
+            }
+
+            // Update progress bar
+            const progress = ((currentStage) / (stages.length - 1)) * 100;
+            progressBar.style.width = progress + '%';
+        }
+    </script>
+</body>

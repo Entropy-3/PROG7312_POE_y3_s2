@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Landing Page";
+    var name = Context.Session.GetString("UserName");
 }
 
 <head>
@@ -19,6 +20,7 @@
             font-weight: bold;
             letter-spacing: 1px;
             color: #00bfff;
+            border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
         }
 
@@ -86,7 +88,7 @@
         Community Hub
     </div>
     <div class="subheader">
-        Welcome! Choose a section below to get started.
+        Welcome @name! Choose a section below to get started.
     </div>
     <div class="container">
         <div class="card">
