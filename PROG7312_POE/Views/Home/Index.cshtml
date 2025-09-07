@@ -1,9 +1,108 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Landing Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
 
+        .header {
+            background-color: rgba(0, 191, 255, 0.15);
+            padding: 20px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #00bfff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .subheader {
+            text-align: center;
+            margin: 15px;
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1500px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-8px);
+                background-color: rgba(0, 191, 255, 0.1);
+            }
+
+            .card h2 {
+                font-size: 22px;
+                color: #00bfff;
+                margin-bottom: 10px;
+            }
+
+            .card p {
+                font-size: 14px;
+                color: rgba(255,255,255,0.8);
+                margin-bottom: 20px;
+            }
+
+            .card a {
+                background-color: #00bfff;
+                color: #fff;
+                padding: 12px 20px;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
+            }
+
+                .card a:hover {
+                    background-color: #00bfff96;
+                }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Community Hub
+    </div>
+    <div class="subheader">
+        Welcome! Choose a section below to get started.
+    </div>
+    <div class="container">
+        <div class="card">
+            <h2>Add an Issue</h2>
+            <p>Report a community issue that needs attention — like potholes, street lights, or other local concerns.</p>
+            <a href="@Url.Action("AddIssue", "Issues")">Go</a>
+        </div>
+        <div class="card">
+            <h2>Local Events & Announcements</h2>
+            <p>Stay up to date with upcoming events, important announcements, and community activities.</p>
+            <a href="@Url.Action("LocalEvents", "Events")">View</a>
+        </div>
+        <div class="card">
+            <h2>Service Request Status</h2>
+            <p>Check the progress and current status of your submitted service requests and reports.</p>
+            <a href="@Url.Action("ServiceStatus", "ServiceRequests")">Check</a>
+        </div>
+    </div>
+</body>
