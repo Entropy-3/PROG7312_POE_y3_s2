@@ -97,14 +97,14 @@
         </div>
 
         <form id="issueForm" method="post" enctype="multipart/form-data">
-            <!-- Stage 1: Location -->
+            @* Stage 1: Location *@
             <div class="stage active" id="stage1">
                 <label>Issue Location</label>
                 <input class="input" type="text" name="Location" placeholder="Enter location" required>
                 <button type="button" class="next-btn" onclick="nextStage()">Next</button>
             </div>
 
-            <!-- Stage 2: Category -->
+            @* Stage 2: Category *@
             <div class="stage" id="stage2">
                 <label>Issue Category</label>
                 <select class="input" name="Category" required>
@@ -117,14 +117,14 @@
                 <button type="button" class="next-btn" onclick="nextStage()">Next</button>
             </div>
 
-            <!-- Stage 3: Description -->
+            @* Stage 3: Description *@
             <div class="stage" id="stage3">
                 <label>Issue Description</label>
                 <textarea class="input" name="Description" rows="4" placeholder="Describe the issue" required></textarea>
                 <button type="button" class="next-btn" onclick="nextStage()">Next</button>
             </div>
 
-            <!-- Stage 4: Attachments -->
+            @*Stage 4: Attachments*@
             <div class="stage" id="stage4">
                 <label>Attachments</label>
                 <input class="input" type="file" name="Attachments" multiple>
