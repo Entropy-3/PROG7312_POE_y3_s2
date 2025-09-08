@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Page Under Construction";
     var name = Context.Session.GetString("UserName");
 }
 
@@ -31,36 +31,31 @@
             color: rgba(255,255,255,0.7);
         }
 
-        .privacy-container {
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 30px;
+        .construction-container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 40px;
+            text-align: center;
             background-color: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
-            .privacy-container h2 {
+            .construction-container h2 {
+                font-size: 28px;
                 color: #00bfff;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
             }
 
-            .privacy-container p {
+            .construction-container p {
                 font-size: 16px;
                 color: rgba(255,255,255,0.8);
-                margin-bottom: 20px;
-                line-height: 1.6;
-            }
-
-            .privacy-container ul {
-                margin-left: 20px;
-                color: rgba(255,255,255,0.85);
+                margin-bottom: 30px;
+                line-height: 1.5;
             }
 
         .back-link {
-            display: inline-block;
-            margin-top: 20px;
             background-color: #00bfff;
             color: #fff;
             padding: 12px 20px;
@@ -73,42 +68,29 @@
             .back-link:hover {
                 background-color: #00bfff96;
             }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
-        Community Hub – Privacy Policy
+        Community Hub
     </div>
     <div class="subheader">
-        Hello @name, your privacy matters to us.
+        Hello @name, this page isn’t ready yet.
     </div>
 
-    <div class="privacy-container">
-        <h2>Information We Collect</h2>
+    <div class="construction-container">
+        <div class="icon">🚧</div>
+        <h2>Page Under Construction</h2>
         <p>
-            We collect information you provide directly, such as when you register, submit reports, or contact support.
-            This may include your name, email, location details for reported issues, and other relevant data.
+            We’re working hard to bring you this feature. Please check back soon —
+            exciting things are on the way!
         </p>
-
-        <h2>How We Use Your Information</h2>
-        <ul>
-            <li>To provide and improve our community services</li>
-            <li>To notify you of updates regarding your reports or service requests</li>
-            <li>To ensure community safety and respond to inquiries</li>
-        </ul>
-
-        <h2>Data Protection</h2>
-        <p>
-            Your data is securely stored and only accessible to authorized personnel. We do not sell your personal
-            information to third parties. All communications are transmitted over encrypted connections.
-        </p>
-
-        <h2>Your Rights</h2>
-        <p>
-            You may request access, correction, or deletion of your personal data at any time by contacting our support team.
-        </p>
-
         <a class="back-link" href="@Url.Action("Index", "Home")">Back to Home</a>
     </div>
 </body>
