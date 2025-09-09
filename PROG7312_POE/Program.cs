@@ -23,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IIssuesService, IssuesService>();
 
 var app = builder.Build();
 

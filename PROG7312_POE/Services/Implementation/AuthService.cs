@@ -14,19 +14,19 @@ namespace PROG7312_POE.Services.Implementation
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-        // Register user
+        //Register user
         public async Task<(bool Success, string ErrorMessage)> RegisterUserAsync(userTBL user)
         {
-            // Lowercase the email
+            //Lowercase the email
             user.Email = user.Email.ToLower();
 
-            // Check if email exists
+            //Check if email exists in the database
             if (await _context.Users.AnyAsync(u => u.Email == user.Email))
             {
                 return (false, "Email is already taken.");
             }
 
-            // Hash password
+            //Hash password
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             _context.Users.Add(user);
@@ -36,13 +36,14 @@ namespace PROG7312_POE.Services.Implementation
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-        // Authenticate user
+        //Authenticate user
         public async Task<userTBL?> AuthenticateUserAsync(string email, string password)
         {
             email = email.ToLower();
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
+            //Verifys password using bcrypt to prevent having to unhash the stored password
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 return null;
