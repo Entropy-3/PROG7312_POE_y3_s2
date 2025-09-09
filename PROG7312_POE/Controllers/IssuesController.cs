@@ -22,7 +22,8 @@ namespace PROG7312_POE.Controllers
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         public IActionResult ViewIssues()
         {
-            return View();
+            var issues = _context.Issues.ToList();
+            return View(issues);
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
@@ -39,7 +40,7 @@ namespace PROG7312_POE.Controllers
 
             issue.UserID = userID.Value;
 
-            // Handle single attachment
+            //chat gpt assisted with the saving of the attachment to the database
             if (Attachment != null && Attachment.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())

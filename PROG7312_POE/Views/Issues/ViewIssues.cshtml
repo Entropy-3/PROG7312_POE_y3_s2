@@ -1,1 +1,94 @@
-﻿
+﻿@model List<PROG7312_POE.Models.issueTBL>
+
+@{
+    ViewData["Title"] = "View Issues";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        .header {
+            background-color: rgba(0, 191, 255, 0.15);
+            padding: 20px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #00bfff;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(0, 191, 255, 0.2);
+            color: #00bfff;
+            font-size: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.03);
+        }
+
+        tr:hover {
+            background-color: rgba(0,191,255,0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">All Community Issues</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Issue ID</th>
+                <th>Location</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Attachment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var issue in Model)
+            {
+                <tr>
+                    <td>@issue.IssueID</td>
+                    <td>@issue.Location</td>
+                    <td>@issue.Category</td>
+                    <td>@issue.Description</td>
+                    <td>
+                        @if (issue.DocumentData != null)
+                        {
+                            <a href="@Url.Action("DownloadAttachment", "Issues", new { id = issue.IssueID })">Download</a>
+                        }
+                        else
+                        {
+                            <span>No File</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
