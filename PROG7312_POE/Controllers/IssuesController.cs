@@ -30,12 +30,12 @@ namespace PROG7312_POE.Controllers
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //method that adds a new issue to the database
         [HttpPost]
-        public async Task<IActionResult> Add(issueTBL issue, IFormFile Attachment)
+        public async Task<IActionResult> AddIssue(issueTBL issue, IFormFile Attachment)
         {
             var userID = HttpContext.Session.GetInt32("UserID");
             if (userID == null)
             {
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "Auth");
             }
 
             issue.UserID = userID.Value;
@@ -48,7 +48,7 @@ namespace PROG7312_POE.Controllers
 
             await _issuesService.AddIssueAsync(issue, Attachment);
 
-            return RedirectToAction("Privacy");
+            return RedirectToAction("ViewIssues");
         }
     }
 }
