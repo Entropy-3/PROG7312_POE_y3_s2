@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PROG7312_POE.Models;
+using PROG7312_POE.Services.Implementation;
+using PROG7312_POE.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,9 @@ builder.Services.AddSession(options =>
 //creates database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//services
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
