@@ -48,6 +48,8 @@ namespace PROG7312_POE.Controllers
 
             await _issuesService.AddIssueAsync(issue, Attachment);
 
+            TempData["SuccessMessage"] = "Your issue has been submitted successfully!";
+
             return RedirectToAction("ViewIssues");
         }
     }

@@ -58,7 +58,12 @@
 
 <body>
     <div class="header">All Community Issues</div>
-
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div style="background-color: rgba(0, 255, 0, 0.2); color: #00ff00; padding: 12px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <table>
         <thead>
             <tr>
