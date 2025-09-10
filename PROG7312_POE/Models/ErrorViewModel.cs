@@ -7,3 +7,4 @@ namespace PROG7312_POE.Models
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\

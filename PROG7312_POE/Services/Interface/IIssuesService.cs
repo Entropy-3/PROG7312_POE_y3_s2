@@ -8,3 +8,4 @@ namespace PROG7312_POE.Services.Interface
         Task<List<issueTBL>> GetAllIssuesAsync();
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\

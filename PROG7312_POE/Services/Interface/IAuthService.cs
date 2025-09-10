@@ -8,3 +8,4 @@ namespace PROG7312_POE.Services.Interface
         Task<userTBL?> AuthenticateUserAsync(string email, string password);
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\

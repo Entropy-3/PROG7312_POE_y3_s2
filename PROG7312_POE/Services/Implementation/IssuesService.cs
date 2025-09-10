@@ -13,22 +13,45 @@ namespace PROG7312_POE.Services.Implementation
             _context = context;
         }
 
-        public async Task<issueTBL> AddIssueAsync(issueTBL issue, IFormFile attachment)
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //Add issue
+        public async Task<issueTBL?> AddIssueAsync(issueTBL issue, IFormFile attachment)
         {
-            if (attachment != null && attachment.Length > 0)
+            try
             {
-                using var memoryStream = new MemoryStream();
-                await attachment.CopyToAsync(memoryStream);
-                issue.DocumentData = memoryStream.ToArray();
-            }
+                if (attachment != null && attachment.Length > 0)
+                {
+                    using var memoryStream = new MemoryStream();
+                    await attachment.CopyToAsync(memoryStream);
+                    issue.DocumentData = memoryStream.ToArray();
+                }
 
-            _context.Issues.Add(issue);
-            await _context.SaveChangesAsync();
-            return issue;
+                _context.Issues.Add(issue);
+                await _context.SaveChangesAsync();
+                return issue;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error while adding issue: {ex.Message}");
+                return null;
+            }
         }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //returns issues from database 
         public async Task<List<issueTBL>> GetAllIssuesAsync()
         {
-            return await _context.Issues.ToListAsync();
+            try
+            {
+                return await _context.Issues.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error while retrieving issues: {ex.Message}");
+                //chat helped with return statement in order to avoid null reference exceptions by returning a null list
+                return new List<issueTBL>();
+            }
         }
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
