@@ -43,6 +43,40 @@
                 justify-content: flex-end;
             }
 
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .app-footer {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: rgba(255, 255, 255, 0.85);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+            .app-footer .footer-title {
+                font-weight: 600;
+                font-size: 1rem;
+                color: #00bfff;
+                margin-bottom: 0.25rem;
+            }
+
+            .app-footer p {
+                margin: 0;
+                color: rgba(255, 255, 255, 0.75);
+            }
+
     </style>
 
 
@@ -107,4 +141,13 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+<footer class="app-footer mt-auto">
+    <div class="container text-center">
+        <p class="footer-title mb-1">Civil Service Portal</p>
+        <p class="mb-1">123 Municipal Street, Cape Town, 8001, South Africa</p>
+        <p class="mb-1">📞 +27 21 123 4567 | ✉️ info@westerncapeconnect.gov.za</p>
+        <p class="mb-0">&copy; @DateTime.Now.Year Civil Service Portal. All rights reserved.</p>
+    </div>
+</footer>
 </html>
