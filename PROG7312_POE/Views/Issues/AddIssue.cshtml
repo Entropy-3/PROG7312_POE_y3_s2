@@ -84,6 +84,17 @@
             border-radius: 10px;
             transition: width 0.3s;
         }
+
+        .summary-box {
+            background-color: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
@@ -129,6 +140,18 @@
             <div class="stage" id="stage4">
                 <label>Attachments</label>
                 <input class="input" type="file" name="Attachment">
+                <button type="button" class="next-btn" onclick="nextStage()">Next</button>
+            </div>
+
+            <!-- Stage 5: Summary -->
+            <div class="stage" id="stage5">
+                <p class="title">Review Your Issue</p>
+                <div class="summary-box">
+                    <div class="summary-item"><strong>Location:</strong> <span id="summaryLocation"></span></div>
+                    <div class="summary-item"><strong>Category:</strong> <span id="summaryCategory"></span></div>
+                    <div class="summary-item"><strong>Description:</strong> <span id="summaryDescription"></span></div>
+                    <div class="summary-item"><strong>Attachment:</strong> <span id="summaryAttachment"></span></div>
+                </div>
                 <button type="submit" class="submit">Submit Issue</button>
             </div>
         </form>
@@ -148,6 +171,21 @@
                     input.reportValidity();
                     return;
                 }
+            }
+
+            //shows summary page with filled in details
+            if (currentStage === 3) {
+                // Fill summary fields
+                document.getElementById('summaryLocation').textContent =
+                    document.querySelector('[name="Location"]').value;
+                document.getElementById('summaryCategory').textContent =
+                    document.querySelector('[name="Category"]').value;
+                document.getElementById('summaryDescription').textContent =
+                    document.querySelector('[name="Description"]').value;
+
+                const attachmentInput = document.querySelector('[name="Attachment"]');
+                document.getElementById('summaryAttachment').textContent =
+                    attachmentInput.value ? attachmentInput.value.split('\\').pop() : 'No attachment';
             }
 
             // Hide current stage
