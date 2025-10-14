@@ -15,6 +15,7 @@ namespace PROG7312_POE.Services.Implementation
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //Add issue
+        //chat gpt assisted me with the logic for saving an attatchment to the database
         public async Task<issueTBL?> AddIssueAsync(issueTBL issue, IFormFile attachment)
         {
             try

@@ -1,0 +1,150 @@
+﻿@{
+    ViewData["Title"] = "Add Event";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        .form {
+            max-width: 680px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            font-size: 26px;
+            color: #00bfff;
+            margin-bottom: 6px;
+        }
+
+        .message {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 18px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #00bfff;
+            cursor: pointer;
+        }
+
+            .submit:hover {
+                background-color: #00bfff96;
+            }
+
+        .help {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 6px;
+        }
+
+        .media (max-width: 600px) {
+            .row
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <p class="title">Add Event</p>
+        <p class="message">Provide event details below. All fields are text except <strong>Date</strong>, which uses a date input.</p>
+
+        <form method="post" asp-controller="Events" asp-action="AddEvent" novalidate>
+            <div class="row">
+                <div class="full">
+                    <label for="Name">Event Name</label>
+                    <input id="Name" name="Name" class="input" type="text" placeholder="Event name" required />
+                </div>
+
+                <div>
+                    <label for="Category">Category</label>
+                    <select id="Category" name="Category" class="input" required>
+                        <option value="">Select category</option>
+                        <option value="Community">Community</option>
+                        <option value="Meeting">Meeting</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Cultural">Cultural</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="Date">Date</label>
+                    <!-- Date is NOT a string: use a date input so browsers show date pickers -->
+                    <input id="Date" name="Date" class="input" type="date" required />
+                </div>
+
+                <div class="full">
+                    <label for="Location">Location</label>
+                    <input id="Location" name="Location" class="input" type="text" placeholder="Enter venue or address" required />
+                </div>
+
+                <div class="full">
+                    <label for="Description">Description</label>
+                    <textarea id="Description" name="Description" class="input" placeholder="Describe the event (what, who, why)" required></textarea>
+                </div>
+
+                <div class="full" style="display:flex; justify-content:flex-end; gap:10px; align-items:center;">
+                    <div class="help" style="flex:1; text-align:left;">
+                        All fields required. Date will post in ISO format from the browser.
+                    </div>
+                    <button type="submit" class="submit">Create Event</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>

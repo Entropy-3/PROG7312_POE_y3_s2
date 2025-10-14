@@ -1,6 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Page Under Construction";
-    var name = Context.Session.GetString("UserName");
+﻿@model List<PROG7312_POE.Models.eventTBL>
+
+@{
+    ViewData["Title"] = "View Events";
 }
 
 <head>
@@ -18,79 +19,227 @@
             text-align: center;
             font-size: 32px;
             font-weight: bold;
-            letter-spacing: 1px;
             color: #00bfff;
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin: 20px auto;
+            max-width: 90%;
         }
 
-        .subheader {
-            text-align: center;
-            margin: 15px;
-            font-size: 18px;
-            color: rgba(255,255,255,0.7);
+        .search-wrap {
+            max-width: 90%;
+            margin: 10px auto 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .construction-container {
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 40px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        .search-box {
+            flex: 1;
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
-            .construction-container h2 {
-                font-size: 28px;
-                color: #00bfff;
-                margin-bottom: 20px;
-            }
-
-            .construction-container p {
-                font-size: 16px;
-                color: rgba(255,255,255,0.8);
-                margin-bottom: 30px;
-                line-height: 1.5;
-            }
-
-        .back-link {
-            background-color: #00bfff;
-            color: #fff;
-            padding: 12px 20px;
+        .search-input {
+            width: 100%;
+            padding: 10px 12px;
             border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
         }
 
-            .back-link:hover {
-                background-color: #00bfff96;
-            }
+        .filter-select {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 14px;
+        }
 
-        .icon {
-            font-size: 50px;
-            margin-bottom: 15px;
+        .table-wrap {
+            width: 90%;
+            margin: 18px auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            min-width: 900px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: rgba(0, 191, 255, 0.2);
+            color: #00bfff;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.03);
+        }
+
+        tr:hover {
+            background-color: rgba(0,191,255,0.06);
+        }
+
+        .action-link {
+            color: #00bfff;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,191,255,0.15);
+            background-color: rgba(0,191,255,0.03);
+            font-size: 13px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 18px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .media (max-width: 700px) {
+            .header
+
+        {
+            font-size: 24px;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        Community Hub
-    </div>
-    <div class="subheader">
-        Hello @name, this page isn’t ready yet.
+    <div class="header">All Community Events</div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div style="background-color: rgba(0, 255, 0, 0.18); color: #b7f7b7; padding: 12px; border-radius: 10px; margin: 0 auto 16px; max-width:90%; text-align:center;">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="search-wrap">
+        <div class="search-box" style="max-width:900px; width:100%;">
+            <input id="searchInput" class="search-input" type="search" placeholder="Search events by name, category, location or description..." />
+        </div>
+
+        <div style="margin-left:12px;">
+            <select id="searchField" class="filter-select" title="Search field">
+                <option value="all">All fields</option>
+                <option value="name">Name</option>
+                <option value="category">Category</option>
+                <option value="location">Location</option>
+                <option value="description">Description</option>
+            </select>
+        </div>
     </div>
 
-    <div class="construction-container">
-        <div class="icon">🚧</div>
-        <h2>Page Under Construction</h2>
-        <p>
-            We’re working hard to bring you this feature. Please check back soon —
-            exciting things are on the way!
-        </p>
-        <a class="back-link" href="@Url.Action("Index", "Home")">Back to Home</a>
+    <div class="table-wrap">
+        <table id="eventsTable" aria-describedby="events-list">
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="col-name">Community Clean-Up</td>
+                    <td class="col-category">Community</td>
+                    <td>2025-11-08</td>
+                    <td class="col-location">Riverside Park</td>
+                    <td class="col-description">Join neighbours to tidy the park, bring gloves and water. Family friendly.</td>
+                    <td>
+                        <a href="#" class="action-link">View</a>
+                        &nbsp;
+                        <a href="#" class="action-link">Edit</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td class="col-name">Town Council Meeting</td>
+                    <td class="col-category">Meeting</td>
+                    <td>2025-11-12</td>
+                    <td class="col-location">Civic Centre, Hall B</td>
+                    <td class="col-description">Monthly council meeting to discuss upcoming budget and development projects.</td>
+                    <td>
+                        <a href="#" class="action-link">View</a>
+                        &nbsp;
+                        <a href="#" class="action-link">Edit</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td class="col-name">Open-Air Yoga</td>
+                    <td class="col-category">Sports</td>
+                    <td>2025-11-15</td>
+                    <td class="col-location">Seaside Promenade</td>
+                    <td class="col-description">Bring your mat for a beginner-friendly yoga session at sunrise. Limited spots.</td>
+                    <td>
+                        <a href="#" class="action-link">View</a>
+                        &nbsp;
+                        <a href="#" class="action-link">Edit</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td class="col-name">Cultural Food Fair</td>
+                    <td class="col-category">Cultural</td>
+                    <td>2025-12-01</td>
+                    <td class="col-location">Market Square</td>
+                    <td class="col-description">Local vendors showcase traditional dishes. Live music and kids area.</td>
+                    <td>
+                        <a href="#" class="action-link">View</a>
+                        &nbsp;
+                        <a href="#" class="action-link">Edit</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>5</td>
+                    <td class="col-name">Neighborhood Soccer Match</td>
+                    <td class="col-category">Sports</td>
+                    <td>2025-11-22</td>
+                    <td class="col-location">East Field</td>
+                    <td class="col-description">Friendly match for all ages. Arrive early for warm-up and team assignments.</td>
+                    <td>
+                        <a href="#" class="action-link">View</a>
+                        &nbsp;
+                        <a href="#" class="action-link">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>

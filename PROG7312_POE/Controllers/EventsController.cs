@@ -8,6 +8,10 @@ namespace PROG7312_POE.Controllers
         {
             return View();
         }
+        public IActionResult AddEvent()
+        {
+            return View();
+        }
     }
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
