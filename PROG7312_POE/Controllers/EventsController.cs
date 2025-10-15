@@ -25,10 +25,12 @@ namespace PROG7312_POE.Controllers
             return View(allEvents);
         }
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //uses a queue to display upcoming events
         [HttpGet]
         public IActionResult UpcomingEvents()
         {
-            var queue = _eventService.GetUpcomingEventsQueue(DateTime.Now);
+            var queue = _eventService.GetUpcomingEventsQueue();
             return View(queue);
         }
 
@@ -40,17 +42,19 @@ namespace PROG7312_POE.Controllers
             return View();
         }
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //method that adds a new event to the database
         [HttpPost]
         public IActionResult AddEvent(eventTBL model)
         {
             if (ModelState.IsValid)
             {
                 _eventService.AddEvent(model);
+                //chatgpt assisted me with the model.EventName syntax
                 TempData["SuccessMessage"] = $"Event '{model.EventName}' added successfully!";
                 return RedirectToAction("Events");
             }
 
-            // If validation fails, re-display form with errors
             return View(model);
         }
     }

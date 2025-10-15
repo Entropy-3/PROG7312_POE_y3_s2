@@ -6,10 +6,8 @@ namespace PROG7312_POE.Services.Interface
     {
         void AddEvent(eventTBL newEvent);
 
-        // Read-side
         List<eventTBL> GetAllEvents();
-        HashSet<string> GetUniqueCategories();
-        Dictionary<string, List<eventTBL>> GetEventsGroupedByCategory();
         Queue<eventTBL> GetUpcomingEventsQueue(DateTime? from = null);
     }
 }
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
