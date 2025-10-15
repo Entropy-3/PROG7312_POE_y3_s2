@@ -89,6 +89,7 @@ namespace PROG7312_POE.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAnnouncement(announcementTBL model)
         {
+            //returns the view with validation errors if the model state is invalid
             if (!ModelState.IsValid)
                 return View(model);
 

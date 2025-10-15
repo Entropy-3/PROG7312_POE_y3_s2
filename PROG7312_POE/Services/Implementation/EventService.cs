@@ -46,12 +46,12 @@ namespace PROG7312_POE.Services.Implementation
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //groups events by date using DateOnly
-        //chat gpt assisted me with this method
         public async Task<Dictionary<DateOnly, List<eventTBL>>> GetEventsByDateAsync()
         {
-            var groups = await _context.Events.AsNoTracking().GroupBy(e => DateOnly.FromDateTime(e.EventDate.Date))
+            var groups = await _context.Events.GroupBy(e => DateOnly.FromDateTime(e.EventDate.Date))
                 .Select(g => new
                 {
+                    //key is the date, items are the events on that date ordered by event date
                     Key = g.Key,
                     Items = g.OrderBy(x => x.EventDate).ToList()
                 })
@@ -62,20 +62,24 @@ namespace PROG7312_POE.Services.Implementation
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //filters events by category and/or date
+        //chat gpt assisted me with this method
         public async Task<List<eventTBL>> GetByCategoryAndDateAsync(string? category, DateOnly? date)
         {
+            //builds the initial query
             var q = _context.Events.AsQueryable();
 
+            //queries the collection based on the user chosen category, can be null
             if (!string.IsNullOrWhiteSpace(category))
                 q = q.Where(e => e.EventCategory == category);
 
+            //queries the collection based on the user chosen date, can be null
             if (date.HasValue)
             {
                 var d = date.Value;
                 q = q.Where(e => DateOnly.FromDateTime(e.EventDate.Date) == d);
             }
 
-            //returns list of searched category and/or date ordered by event date
+            //returns list of searched category and/or date ordered by event date ordered by event date
             return await q.OrderBy(e => e.EventDate).ToListAsync();
         }
 
@@ -88,6 +92,7 @@ namespace PROG7312_POE.Services.Implementation
             //chatgpt assisted me with the event date filtering logic
             var ordered = await _context.Events.Where(e => e.EventDate >= start).OrderBy(e => e.EventDate).ToListAsync();
 
+            //returns the ordered list as a queue
             return new Queue<eventTBL>(ordered);
         }
 
@@ -106,6 +111,7 @@ namespace PROG7312_POE.Services.Implementation
         //returns all announcements from the database
         public async Task<List<announcementTBL>> GetAllAnnouncementsAsync()
         {
+            //returns all announcements from the database
             return await _context.Announcements.ToListAsync();
         }
 
