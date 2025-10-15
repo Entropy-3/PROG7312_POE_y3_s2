@@ -1,4 +1,5 @@
-﻿using PROG7312_POE.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using PROG7312_POE.Models;
 using PROG7312_POE.Services.Interface;
 
 namespace PROG7312_POE.Services.Implementation
@@ -16,28 +17,28 @@ namespace PROG7312_POE.Services.Implementation
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //method that adds a new event to the database
-        public void AddEvent(eventTBL newEvent)
+        public async Task AddEventAsync(eventTBL newEvent)
         {
-            _context.Events.Add(newEvent);
-            _context.SaveChanges();
+            await _context.Events.AddAsync(newEvent);
+            await _context.SaveChangesAsync();
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //returns all events from the database ordered by date
-        public List<eventTBL> GetAllEvents()
+        public async Task<List<eventTBL>> GetAllEventsAsync()
         {
             //chatgpt assisted me with the OrderBy syntax
-            return _context.Events.OrderBy(e => e.EventDate).ToList();
+            return await _context.Events.OrderBy(e => e.EventDate).ToListAsync();
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //queue of upcoming events
-        public Queue<eventTBL> GetUpcomingEventsQueue(DateTime? from = null)
+        public async Task<Queue<eventTBL>> GetUpcomingEventsQueueAsync(DateTime? from = null)
         {
             var start = from ?? DateTime.UtcNow;
 
             //chatgpt assisted me with the event date filtering logic
-            var ordered = _context.Events.Where(e => e.EventDate >= start).OrderBy(e => e.EventDate).ToList();
+            var ordered = await _context.Events.Where(e => e.EventDate >= start).OrderBy(e => e.EventDate).ToListAsync();
 
             return new Queue<eventTBL>(ordered);
         }

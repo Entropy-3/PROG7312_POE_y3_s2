@@ -19,18 +19,18 @@ namespace PROG7312_POE.Controllers
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //displays all events
         [HttpGet]
-        public IActionResult Events()
+        public async Task<IActionResult> Events()
         {
-            var allEvents = _eventService.GetAllEvents();
+            var allEvents = await _eventService.GetAllEventsAsync();
             return View(allEvents);
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //uses a queue to display upcoming events
         [HttpGet]
-        public IActionResult UpcomingEvents()
+        public async Task<IActionResult> UpcomingEvents()
         {
-            var queue = _eventService.GetUpcomingEventsQueue();
+            var queue = await _eventService.GetUpcomingEventsQueueAsync();
             return View(queue);
         }
 
@@ -45,18 +45,18 @@ namespace PROG7312_POE.Controllers
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //method that adds a new event to the database
         [HttpPost]
-        public IActionResult AddEvent(eventTBL model)
+        public async Task<IActionResult> AddEvent(eventTBL model)
         {
-            if (ModelState.IsValid)
-            {
-                _eventService.AddEvent(model);
-                //chatgpt assisted me with the model.EventName syntax
-                TempData["SuccessMessage"] = $"Event '{model.EventName}' added successfully!";
-                return RedirectToAction("Events");
-            }
+            //returns the view with validation errors if the model state is invalid
+            if (!ModelState.IsValid)
+                return View(model);
 
-            return View(model);
+            await _eventService.AddEventAsync(model);
+            //chat gpt assisted me with the model.EventName syntax
+            TempData["SuccessMessage"] = $"Event '{model.EventName}' added successfully!";
+            return RedirectToAction("Events");
         }
     }
 }
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\

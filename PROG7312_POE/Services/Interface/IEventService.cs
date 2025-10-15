@@ -4,10 +4,9 @@ namespace PROG7312_POE.Services.Interface
 {
     public interface IEventService
     {
-        void AddEvent(eventTBL newEvent);
-
-        List<eventTBL> GetAllEvents();
-        Queue<eventTBL> GetUpcomingEventsQueue(DateTime? from = null);
+        Task AddEventAsync(eventTBL newEvent);
+        Task<List<eventTBL>> GetAllEventsAsync();
+        Task<Queue<eventTBL>> GetUpcomingEventsQueueAsync(DateTime? from = null);
     }
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
