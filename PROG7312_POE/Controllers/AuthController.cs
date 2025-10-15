@@ -8,6 +8,8 @@ namespace PROG7312_POE.Controllers
     {
         private readonly IAuthService _authService;
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        // Constructor that injects the authentication service
         public AuthController(IAuthService authService)
         {
             _authService = authService;
