@@ -2,10 +2,13 @@
 
 @{
     ViewData["Title"] = "View Events";
-    var cats  = (IEnumerable<string>)ViewBag.Categories ?? Enumerable.Empty<string>();
+    var cats = (IEnumerable<string>)ViewBag.Categories ?? Enumerable.Empty<string>();
     var dates = (IEnumerable<string>)ViewBag.Dates ?? Enumerable.Empty<string>();
-    var selCat  = (string)ViewBag.SelectedCategory ?? "";
+
+    //chat gpt assisted me with the viewbag code
+    var selCat = (string)ViewBag.SelectedCategory ?? "";
     var selDate = (string)ViewBag.SelectedDate ?? "";
+    var ann = (IEnumerable<PROG7312_POE.Models.announcementTBL>)(ViewBag.Announcements ?? new List<PROG7312_POE.Models.announcementTBL>());
 }
 
 <head>
@@ -39,7 +42,7 @@
             gap: 12px;
         }
 
-        .create-btn {
+        .create-btn, .link-btn {
             background-color: #00bfff;
             color: #fff;
             border: none;
@@ -52,7 +55,10 @@
             text-decoration: none;
             display: inline-block;
         }
-        .create-btn:hover { background-color: #009acd; }
+
+            .create-btn:hover, .link-btn:hover {
+                background-color: #009acd;
+            }
 
         .filter-select {
             padding: 10px 12px;
@@ -63,6 +69,10 @@
             font-size: 14px;
             box-sizing: border-box;
             min-width: 180px;
+        }
+
+        .ann-content {
+            opacity: .9;
         }
 
         .table-wrap {
@@ -94,14 +104,77 @@
             white-space: nowrap;
         }
 
-        tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
-        tr:hover { background-color: rgba(0,191,255,0.06); }
+        tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.03);
+        }
+
+        tr:hover {
+            background-color: rgba(0,191,255,0.06);
+        }
+
+        .ann-section {
+            max-width: 90%;
+            margin: 16px auto 0;
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .ann-section__header {
+            font-size: 18px;
+            font-weight: 700;
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+        .ann-wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .ann-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .ann-title {
+            color: #00bfff;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            font-size: 18px;
+        }
+
+        .ann-content {
+            opacity: .9;
+        }
     </style>
 </head>
 
 <body>
+    @* Announcements *@
+    @if (ann.Any())
+    {
+        <div class="ann-section">
+            <div class="ann-section__header">Announcements</div>
+
+            <div class="ann-wrap">
+                @foreach (var a in ann)
+                {
+                    <div class="ann-card">
+                        <div class="ann-title">@a.Title</div>
+                        <div class="ann-content">@a.Content</div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <div class="header">All Community Events</div>
 
+	@*Search filters *@
     <div class="button-wrap">
         <form method="get" asp-controller="Events" asp-action="Events" style="display:flex; gap:12px; align-items:center; margin:0;">
             <select name="category" class="filter-select" onchange="this.form.submit()">
@@ -126,15 +199,21 @@
             }
         </form>
 
-        <a href="@Url.Action("AddEvent", "Events")" class="create-btn">+ Create New Event</a>
+        @* Buttons *@
+        <div style="display:flex; gap:12px;">
+            <a href="@Url.Action("UpcomingEvents", "Events")" class="link-btn">View Upcoming Events</a>
+            <a href="@Url.Action("AddEvent", "Events")" class="create-btn">+ Create New Event</a>
+        </div>
     </div>
 
+	@*Success message for creating an event*@
     @if (TempData["SuccessMessage"] != null)
     {
         <div style="background-color: rgba(0, 255, 0, 0.18); color: #b7f7b7; padding: 12px; border-radius: 10px; margin: 12px auto 0; max-width:90%; text-align:center;">
             @TempData["SuccessMessage"]
         </div>
     }
+
 
     <div class="table-wrap">
         <table id="eventsTable" aria-describedby="events-list">

@@ -70,12 +70,6 @@
             .submit:hover {
                 background-color: #00bfff96;
             }
-
-        .helper {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            margin-top: 6px;
-        }
     </style>
 </head>
 
@@ -83,7 +77,7 @@
     <div class="form">
         <p class="title">Add Announcement</p>
 
-        <form id="announcementForm" method="post" asp-controller="Announcements" asp-action="AddAnnouncement">
+        <form id="announcementForm" method="post" asp-controller="Events" asp-action="AddAnnouncement">
             @Html.AntiForgeryToken()
 
             <label>Title</label>
@@ -91,8 +85,6 @@
 
             <label>Content</label>
             <textarea class="input" name="Content" rows="8" placeholder="Write the announcement content..." required></textarea>
-
-            <div class="helper">Both fields are required. Keep the title concise.</div>
 
             <button type="submit" class="submit" style="margin-top:12px;">Create Announcement</button>
         </form>

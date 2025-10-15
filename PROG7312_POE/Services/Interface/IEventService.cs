@@ -6,6 +6,8 @@ namespace PROG7312_POE.Services.Interface
     {
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //Events
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+
         Task AddEventAsync(eventTBL newEvent);
 
         Task<List<eventTBL>> GetAllEventsAsync();
@@ -18,6 +20,8 @@ namespace PROG7312_POE.Services.Interface
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //Announcements
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+
         Task AddAnnouncementAsync(announcementTBL newAnnouncement);
         Task<List<announcementTBL>> GetAllAnnouncementsAsync();
     }

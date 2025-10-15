@@ -48,8 +48,13 @@ namespace PROG7312_POE.Controllers
                 ? await _eventService.GetByCategoryAndDateAsync(category, date)
                 : await _eventService.GetAllEventsAsync();
 
+            //sets the selected category and date in the viewbag for retaining filter selections
             ViewBag.SelectedCategory = category ?? "";
             ViewBag.SelectedDate = date?.ToString("yyyy-MM-dd") ?? "";
+
+            //grabs the 2 most recent announcements to display on the events page by using the AnnouncementID
+            var announcements = await _eventService.GetAllAnnouncementsAsync();
+            ViewBag.Announcements = announcements.OrderByDescending(a => a.AnnouncementID).Take(2).ToList();
 
             //returns the view with the model containing the filtered or all events
             return View(model);
