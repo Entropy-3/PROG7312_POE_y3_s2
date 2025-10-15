@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PROG7312_POE.Models.eventTBL
+
+@{
     ViewData["Title"] = "Add Event";
 }
 
@@ -80,70 +82,38 @@
             .submit:hover {
                 background-color: #00bfff96;
             }
-
-        .help {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            margin-top: 6px;
-        }
-
-        .media (max-width: 600px) {
-            .row
-
-        {
-            grid-template-columns: 1fr;
-        }
-
-        }
     </style>
 </head>
 
 <body>
     <div class="form">
         <p class="title">Add Event</p>
-        <p class="message">Provide event details below. All fields are text except <strong>Date</strong>, which uses a date input.</p>
+        <p class="message">Provide event details below. All fields are required.</p>
 
-        <form method="post" asp-controller="Events" asp-action="AddEvent" novalidate>
-            <div class="row">
-                <div class="full">
-                    <label for="Name">Event Name</label>
-                    <input id="Name" name="Name" class="input" type="text" placeholder="Event name" required />
-                </div>
+        <form id="eventForm" method="post" asp-controller="Events" asp-action="AddEvent">
+            <label>Event Name</label>
+            <input class="input" type="text" name="EventName" placeholder="Event name" required />
 
-                <div>
-                    <label for="Category">Category</label>
-                    <select id="Category" name="Category" class="input" required>
-                        <option value="">Select category</option>
-                        <option value="Community">Community</option>
-                        <option value="Meeting">Meeting</option>
-                        <option value="Sports">Sports</option>
-                        <option value="Cultural">Cultural</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
+            <label>Event Category</label>
+            <select class="input" name="EventCategory" required>
+                <option value="">Select category</option>
+                <option value="Community">Community</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Sports">Sports</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Other">Other</option>
+            </select>
 
-                <div>
-                    <label for="Date">Date</label>
-                    <input id="Date" name="Date" class="input" type="date" required />
-                </div>
+            <label>Event Date</label>
+            <input class="input" type="date" name="EventDate" required />
 
-                <div class="full">
-                    <label for="Location">Location</label>
-                    <input id="Location" name="Location" class="input" type="text" placeholder="Enter venue or address" required />
-                </div>
+            <label>Location</label>
+            <input class="input" type="text" name="Location" placeholder="Enter venue or address" required />
 
-                <div class="full">
-                    <label for="Description">Description</label>
-                    <textarea id="Description" name="Description" class="input" placeholder="Describe the event (what, who, why)" required></textarea>
-                </div>
+            <label>Description</label>
+            <textarea class="input" name="Description" rows="4" placeholder="Describe the event (what, who, why)" required></textarea>
 
-                <div class="full" style="display:flex; justify-content:flex-end; gap:10px; align-items:center;">
-                    <div class="help" style="flex:1; text-align:left;">
-                        All fields required. Date will post in ISO format from the browser.
-                    </div>
-                    <button type="submit" class="submit">Create Event</button>
-                </div>
-            </div>
+            <button type="submit" class="submit" style="margin-top:12px;">Create Event</button>
         </form>
     </div>
 </body>

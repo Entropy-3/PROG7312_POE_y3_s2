@@ -25,6 +25,13 @@ namespace PROG7312_POE.Controllers
             return View(allEvents);
         }
 
+        [HttpGet]
+        public IActionResult UpcomingEvents()
+        {
+            var queue = _eventService.GetUpcomingEventsQueue(DateTime.Now);
+            return View(queue);
+        }
+
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //displays the AddEvent view
         [HttpGet]

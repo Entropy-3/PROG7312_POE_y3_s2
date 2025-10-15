@@ -1,0 +1,79 @@
+﻿@model Queue<PROG7312_POE.Models.eventTBL>
+
+@{
+    ViewData["Title"] = "Upcoming Events";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+        .header {
+            background-color: rgba(0, 191, 255, 0.15);
+            padding: 20px; text-align: center;
+            font-size: 32px; font-weight: bold;
+            color: #00bfff; border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin: 20px auto; max-width: 90%;
+        }
+        .next-card {
+            max-width: 90%; margin: 12px auto;
+            padding: 16px; border-radius: 12px;
+            background: rgba(0,191,255,0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        .table-wrap { width: 90%; margin: 18px auto; overflow-x: auto; }
+        table {
+            width: 100%; border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px; overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            min-width: 900px;
+        }
+        th, td { padding: 12px 15px; text-align: left; vertical-align: middle; }
+        th { background-color: rgba(0, 191, 255, 0.2); color: #00bfff; font-size: 15px; white-space: nowrap; }
+        tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
+        tr:hover { background-color: rgba(0,191,255,0.06); }
+    </style>
+</head>
+
+<body>
+    <div class="header">Upcoming Events</div>
+
+    <div class="table-wrap">
+        <table id="eventsTable" aria-describedby="upcoming-events-list">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.EventName</td>
+                        <td>@item.EventCategory</td>
+                        <td>@item.EventDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Location</td>
+                        <td>@item.Description</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="5" style="text-align:center;">No events found.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</body>

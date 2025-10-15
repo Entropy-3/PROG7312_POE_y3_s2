@@ -1,51 +1,52 @@
 ﻿using PROG7312_POE.Models;
+using PROG7312_POE.Services.Interface;
 
 namespace PROG7312_POE.Services.Implementation
 {
-    public class EventService
+    public class EventService : IEventService
     {
-        // Queue
-        private Queue<eventTBL> eventQueue = new Queue<eventTBL>();
+        private readonly AppDbContext _context;
 
-        // Dictionary that store events by category
-        private Dictionary<string, List<eventTBL>> categorizedEvents = new Dictionary<string, List<eventTBL>>();
+        public EventService(AppDbContext context)
+        {
+            _context = context;
+        }
 
-        // Set that unique list of event categories
-        private HashSet<string> uniqueCategories = new HashSet<string>();
 
         public void AddEvent(eventTBL newEvent)
         {
-            // Add to queue
-            eventQueue.Enqueue(newEvent);
-
-            // Add to set
-            uniqueCategories.Add(newEvent.EventCategory);
-
-            // Add to dictionary
-            if (!categorizedEvents.ContainsKey(newEvent.EventCategory))
-            {
-                categorizedEvents[newEvent.EventCategory] = new List<eventTBL>();
-            }
-
-            categorizedEvents[newEvent.EventCategory].Add(newEvent);
+            _context.Events.Add(newEvent);
+            _context.SaveChanges();
         }
 
         public List<eventTBL> GetAllEvents()
         {
-            // Combine all events from the dictionary
-            List<eventTBL> allEvents = new List<eventTBL>();
+            return _context.Events
+                      .OrderBy(e => e.EventDate)
+                      .ToList();
+        }
 
-            foreach (var category in categorizedEvents.Values)
-            {
-                allEvents.AddRange(category);
-            }
-
-            return allEvents;
+        public Dictionary<string, List<eventTBL>> GetEventsGroupedByCategory()
+        {
+            throw new NotImplementedException();
         }
 
         public HashSet<string> GetUniqueCategories()
         {
-            return uniqueCategories;
+            throw new NotImplementedException();
+        }
+
+        // Queue of upcoming events (computed from DB)
+        public Queue<eventTBL> GetUpcomingEventsQueue(DateTime? from = null)
+        {
+            var start = from ?? DateTime.UtcNow;
+
+            var ordered = _context.Events
+                             .Where(e => e.EventDate >= start)
+                             .OrderBy(e => e.EventDate)
+                             .ToList();
+
+            return new Queue<eventTBL>(ordered);
         }
     }
 }
