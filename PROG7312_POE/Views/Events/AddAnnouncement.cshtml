@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Add Announcement";
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        .form {
+            max-width: 680px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            font-size: 26px;
+            color: #00bfff;
+            margin-bottom: 6px;
+        }
+
+        .message {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #00bfff;
+            cursor: pointer;
+        }
+
+            .submit:hover {
+                background-color: #00bfff96;
+            }
+
+        .helper {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <p class="title">Add Announcement</p>
+
+        <form id="announcementForm" method="post" asp-controller="Announcements" asp-action="AddAnnouncement">
+            @Html.AntiForgeryToken()
+
+            <label>Title</label>
+            <input class="input" type="text" name="Title" placeholder="Announcement title" maxlength="120" required />
+
+            <label>Content</label>
+            <textarea class="input" name="Content" rows="8" placeholder="Write the announcement content..." required></textarea>
+
+            <div class="helper">Both fields are required. Keep the title concise.</div>
+
+            <button type="submit" class="submit" style="margin-top:12px;">Create Announcement</button>
+        </form>
+    </div>
+</body>

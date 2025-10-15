@@ -25,6 +25,14 @@ namespace PROG7312_POE.Controllers
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //displays the AddAnnouncement view
+        [HttpGet]
+        public IActionResult AddAnnouncement()
+        {
+            return View();
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
         //chatgpt assisted me with the viewbags
         [HttpGet]
         public async Task<IActionResult> Events(string? category, DateOnly? date)
@@ -68,6 +76,18 @@ namespace PROG7312_POE.Controllers
             await _eventService.AddEventAsync(model);
             //chat gpt assisted me with the model.EventName syntax
             TempData["SuccessMessage"] = $"Event '{model.EventName}' added successfully!";
+            return RedirectToAction("Events");
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //method that adds a new announcement to the database
+        [HttpPost]
+        public async Task<IActionResult> AddAnnouncement(announcementTBL model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            await _eventService.AddAnnouncementAsync(model);
             return RedirectToAction("Events");
         }
     }
