@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "View Events";
+    var cats  = (IEnumerable<string>)ViewBag.Categories ?? Enumerable.Empty<string>();
+    var dates = (IEnumerable<string>)ViewBag.Dates ?? Enumerable.Empty<string>();
+    var selCat  = (string)ViewBag.SelectedCategory ?? "";
+    var selDate = (string)ViewBag.SelectedDate ?? "";
 }
 
 <head>
@@ -28,9 +32,11 @@
 
         .button-wrap {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
             max-width: 90%;
             margin: 10px auto 0;
+            gap: 12px;
         }
 
         .create-btn {
@@ -43,29 +49,12 @@
             border-radius: 10px;
             cursor: pointer;
             transition: 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
         }
+        .create-btn:hover { background-color: #009acd; }
 
-            .create-btn:hover {
-                background-color: #009acd;
-            }
-
-        .search-wrap {
-            max-width: 90%;
-            margin: 10px auto 0;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .search-box {
-            flex: 1;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .search-input, .filter-select {
+        .filter-select {
             padding: 10px 12px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.08);
@@ -73,6 +62,7 @@
             color: #fff;
             font-size: 14px;
             box-sizing: border-box;
+            min-width: 180px;
         }
 
         .table-wrap {
@@ -104,18 +94,8 @@
             white-space: nowrap;
         }
 
-        tr:nth-child(even) {
-            background-color: rgba(255,255,255,0.03);
-        }
-
-        tr:hover {
-            background-color: rgba(0,191,255,0.06);
-        }
-        th, td {
-            padding: 10px;
-        }
-
-        }
+        tr:nth-child(even) { background-color: rgba(255,255,255,0.03); }
+        tr:hover { background-color: rgba(0,191,255,0.06); }
     </style>
 </head>
 
@@ -123,31 +103,38 @@
     <div class="header">All Community Events</div>
 
     <div class="button-wrap">
+        <form method="get" asp-controller="Events" asp-action="Events" style="display:flex; gap:12px; align-items:center; margin:0;">
+            <select name="category" class="filter-select" onchange="this.form.submit()">
+                <option value="">All categories</option>
+                @foreach (var c in cats)
+                {
+                    <option value="@c" selected="@(selCat == c)">@c</option>
+                }
+            </select>
+
+            <select name="date" class="filter-select" onchange="this.form.submit()">
+                <option value="">All dates</option>
+                @foreach (var d in dates)
+                {
+                    <option value="@d" selected="@(selDate == d)">@d</option>
+                }
+            </select>
+
+            @if (!string.IsNullOrEmpty(selCat) || !string.IsNullOrEmpty(selDate))
+            {
+                <a href="@Url.Action("Events","Events")" class="create-btn" style="background:#666;">Reset</a>
+            }
+        </form>
+
         <a href="@Url.Action("AddEvent", "Events")" class="create-btn">+ Create New Event</a>
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div style="background-color: rgba(0, 255, 0, 0.18); color: #b7f7b7; padding: 12px; border-radius: 10px; margin: 0 auto 16px; max-width:90%; text-align:center;">
+        <div style="background-color: rgba(0, 255, 0, 0.18); color: #b7f7b7; padding: 12px; border-radius: 10px; margin: 12px auto 0; max-width:90%; text-align:center;">
             @TempData["SuccessMessage"]
         </div>
     }
-
-    <div class="search-wrap">
-        <div class="search-box" style="max-width:900px; width:100%;">
-            <input id="searchInput" class="search-input" type="search" placeholder="Search events by name, category, location or description..." />
-        </div>
-
-        <div style="margin-left:12px;">
-            <select id="searchField" class="filter-select" title="Search field">
-                <option value="all">All fields</option>
-                <option value="name">Name</option>
-                <option value="category">Category</option>
-                <option value="location">Location</option>
-                <option value="description">Description</option>
-            </select>
-        </div>
-    </div>
 
     <div class="table-wrap">
         <table id="eventsTable" aria-describedby="events-list">
@@ -177,48 +164,10 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" style="text-align:center;">No events found.</td>
+                        <td colspan="5" style="text-align:center;">No events found.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const searchField = document.getElementById('searchField');
-        const table = document.getElementById('eventsTable');
-        const rows = table.getElementsByTagName('tr');
-
-        searchInput.addEventListener('keyup', function () {
-            const filter = searchInput.value.toLowerCase();
-            const field = searchField.value;
-
-            for (let i = 1; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let showRow = false;
-
-                if (cells.length > 0) {
-                    const name = cells[1].textContent.toLowerCase();
-                    const category = cells[2].textContent.toLowerCase();
-                    const location = cells[4].textContent.toLowerCase();
-                    const description = cells[5].textContent.toLowerCase();
-
-                    if (field === 'all' && (name.includes(filter) || category.includes(filter) || location.includes(filter) || description.includes(filter))) {
-                        showRow = true;
-                    } else if (field === 'name' && name.includes(filter)) {
-                        showRow = true;
-                    } else if (field === 'category' && category.includes(filter)) {
-                        showRow = true;
-                    } else if (field === 'location' && location.includes(filter)) {
-                        showRow = true;
-                    } else if (field === 'description' && description.includes(filter)) {
-                        showRow = true;
-                    }
-                }
-
-                rows[i].style.display = showRow ? '' : 'none';
-            }
-        });
-    </script>
 </body>

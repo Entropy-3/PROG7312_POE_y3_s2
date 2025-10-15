@@ -17,12 +17,34 @@ namespace PROG7312_POE.Controllers
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-        //displays all events
+        //displays the AddEvent view
         [HttpGet]
-        public async Task<IActionResult> Events()
+        public IActionResult AddEvent()
         {
-            var allEvents = await _eventService.GetAllEventsAsync();
-            return View(allEvents);
+            return View();
+        }
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
+        //chatgpt assisted me with the viewbags
+        [HttpGet]
+        public async Task<IActionResult> Events(string? category, DateOnly? date)
+        {
+            var categoriesSet = await _eventService.GetUniqueCategoriesAsync();
+            ViewBag.Categories = categoriesSet.OrderBy(c => c).ToList();
+
+            var eventsByDate = await _eventService.GetEventsByDateAsync();
+            ViewBag.Dates = eventsByDate.Keys.OrderBy(d => d).Select(d => d.ToString("yyyy-MM-dd")).ToList();
+
+            //uses method in service to filter events by category and/or date
+            var model = (category != null || date != null)
+                ? await _eventService.GetByCategoryAndDateAsync(category, date)
+                : await _eventService.GetAllEventsAsync();
+
+            ViewBag.SelectedCategory = category ?? "";
+            ViewBag.SelectedDate = date?.ToString("yyyy-MM-dd") ?? "";
+
+            //returns the view with the model containing the filtered or all events
+            return View(model);
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
@@ -32,14 +54,6 @@ namespace PROG7312_POE.Controllers
         {
             var queue = await _eventService.GetUpcomingEventsQueueAsync();
             return View(queue);
-        }
-
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-        //displays the AddEvent view
-        [HttpGet]
-        public IActionResult AddEvent()
-        {
-            return View();
         }
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
@@ -58,5 +72,4 @@ namespace PROG7312_POE.Controllers
         }
     }
 }
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
