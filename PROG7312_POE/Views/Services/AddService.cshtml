@@ -1,5 +1,116 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model PROG7312_POE.Models.serviceTBL
+@using PROG7312_POE.Models
+
 @{
+    ViewData["Title"] = "Add Service Request";
 }
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+
+        .form {
+            max-width: 680px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .title {
+            font-size: 26px;
+            color: #00bfff;
+            margin-bottom: 6px;
+        }
+
+        .message {
+            font-size: 14px;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: rgba(255,255,255,0.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            background-color: #00bfff;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .submit:hover {
+                background-color: #00bfff96;
+            }
+
+        .status-chip {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+            border: 1px solid rgba(255,255,255,0.12);
+            margin-bottom: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form">
+        <p class="title">Add Service Request</p>
+        <p class="message">Provide service details below. All fields are required.</p>
+
+        <form id="serviceForm" method="post" asp-controller="Services" asp-action="AddService">
+
+            <label>Service Title</label>
+            <input class="input" asp-for="Title" type="text" placeholder="Enter service request title" required />
+
+            <label>Priority</label>
+            <select class="input" asp-for="Priority" asp-items="Html.GetEnumSelectList<RequestPriority>()" required>
+                <option value="">Select priority</option>
+            </select>
+
+            <label>Description</label>
+            <textarea class="input" asp-for="Description" rows="4" placeholder="Describe the service issue or request" required></textarea>
+
+            <label>Status</label>
+            <div class="status-chip">New</div>
+            <input type="hidden" asp-for="Status" value="New" />
+
+            <button type="submit" class="submit">Create Service Request</button>
+        </form>
+    </div>
+</body>

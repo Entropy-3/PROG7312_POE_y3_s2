@@ -1,0 +1,256 @@
+﻿@using PROG7312_POE.Models
+@model serviceTBL
+
+@{
+    ViewData["Title"] = $"Service #{Model.ServiceID}";
+    var related = ViewBag.Related as List<serviceTBL> ?? new List<serviceTBL>();
+    string PrioClass(RequestPriority p) => "prio-" + p.ToString();
+}
+
+<head>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+            color: #fff;
+        }
+
+        .page {
+            max-width: 980px;
+            margin: 40px auto 80px;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(0,191,255,.15);
+            padding: 18px 22px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,.4);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00bfff;
+            margin: 0;
+        }
+
+        .btn {
+            background: #00bfff;
+            color: #fff;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+            .btn:hover {
+                background: #00bfff96;
+            }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .card {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.5);
+            padding: 18px;
+        }
+
+        .section-title {
+            color: #00bfff;
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .meta-item {
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .meta-k {
+            font-size: 12px;
+            color: rgba(255,255,255,.7);
+        }
+
+        .meta-v {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,.12);
+        }
+
+        .prio-Critical {
+            background: rgba(255,77,77,.15);
+            color: #ff6b6b;
+        }
+
+        .prio-High {
+            background: rgba(255,170,51,.15);
+            color: #ffb74d;
+        }
+
+        .prio-Medium {
+            background: rgba(0,191,255,.15);
+            color: #00bfff;
+        }
+
+        .prio-Low {
+            background: rgba(144,238,144,.15);
+            color: #7ad57a;
+        }
+
+        .status-chip {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            color: rgba(255,255,255,.9);
+            background: rgba(255,255,255,.06);
+        }
+
+        .input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,.75);
+        }
+
+        .related-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .related-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .link {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(255,255,255,.25);
+        }
+
+            .link:hover {
+                color: #00bfff;
+                border-bottom-color: #00bfff;
+            }
+        @@media (max-width:900px) {
+            .grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1 class="title">Service #@Model.ServiceID</h1>
+            <a class="btn" asp-controller="Services" asp-action="Services">Back to Dashboard</a>
+        </div>
+
+        <div class="grid">
+            <section class="card">
+                <h3 class="section-title">Details</h3>
+                <h2 style="margin:6px 0 4px 0;">@Model.Title</h2>
+                <p class="subtitle" style="margin:0 0 10px 0;">Created: @Model.CreatedUtc.ToLocalTime()</p>
+                <p>@Model.Description</p>
+
+                <div class="meta">
+                    <div class="meta-item">
+                        <div class="meta-k">Priority</div>
+                        <div class="meta-v"><span class="badge @PrioClass(Model.Priority)">@Model.Priority</span></div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-k">Status</div>
+                        <div class="meta-v"><span class="status-chip">@Model.Status</span></div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px;">
+                    <form asp-controller="Services" asp-action="AdvanceStatus" method="post" style="display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:end;">
+                        <input type="hidden" name="id" value="@Model.ServiceID" />
+                        <div>
+                            <label for="next" class="meta-k">Update Status</label>
+                            <select id="next" name="next" asp-items="Html.GetEnumSelectList<RequestStatus>()" class="input"></select>
+                        </div>
+                        <button class="btn" type="submit">Save</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                </div>
+            </section>
+
+            <aside class="card">
+                <h3 class="section-title">Related</h3>
+                @if (!related.Any())
+                {
+                    <p class="subtitle">No related requests found.</p>
+                }
+                else
+                {
+                    <ul class="related-list">
+                        @foreach (var r in related)
+                        {
+                            <li class="related-item">
+                                <span class="badge @PrioClass(r.Priority)">@r.Priority</span>
+                                <div>
+                                    <a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.Title</a>
+                                    <div class="subtitle">ID: @r.ServiceID • @r.CreatedUtc.ToLocalTime()</div>
+                                </div>
+                                <span class="status-chip">@r.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                <p class="subtitle" style="margin-top:10px;">Related items are discovered through common service status.</p>
+            </aside>
+        </div>
+    </div>
+</body>

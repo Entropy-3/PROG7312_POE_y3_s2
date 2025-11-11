@@ -4,6 +4,7 @@ using PROG7312_POE.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PROG7312_POE.Services.Implementation
 {
@@ -97,9 +98,10 @@ namespace PROG7312_POE.Services.Implementation
         {
             try
             {
-                var all = await _context.Services.AsNoTracking().ToListAsync();
-                var idx = SimpleRequestIndex.Build(all);
-                return idx.TopUrgent(count);
+                List<serviceTBL> all = await _context.Services.AsNoTracking().ToListAsync();
+                SimpleRequestIndex idx = SimpleRequestIndex.Build(all);
+                List<serviceTBL> result = await idx.TopUrgent(count);
+                return result;
             }
             catch (Exception ex)
             {
@@ -117,9 +119,7 @@ namespace PROG7312_POE.Services.Implementation
                 var all = await _context.Services.AsNoTracking().ToListAsync();
                 var idx = SimpleRequestIndex.Build(all);
                 var relatedIds = idx.RelatedIds(id).ToHashSet();
-                return all.Where(s => relatedIds.Contains(s.ServiceID))
-                          .OrderByDescending(s => s.Priority)
-                          .ToList();
+                return all.Where(s => relatedIds.Contains(s.ServiceID)).OrderByDescending(s => s.Priority).ToList();
             }
             catch (Exception ex)
             {
@@ -135,8 +135,11 @@ namespace PROG7312_POE.Services.Implementation
             {
                 public int K; public serviceTBL V;
                 public BstNode? L, R;
-                public BstNode(int k, serviceTBL v) { K = k; V = v; }
+
+                public BstNode(int k, serviceTBL v)
+                { K = k; V = v; }
             }
+
             private BstNode? _root;
 
             private void BstInsert(int k, serviceTBL v)
@@ -163,67 +166,93 @@ namespace PROG7312_POE.Services.Implementation
                 v = null; return false;
             }
 
-            // ------------------ Max-Heap (priority then recency) ------------------
+            // ==== Max-Heap (priority then recency) =======================================
+            //heap implemented using arrays
             private sealed class MaxHeap
             {
                 private readonly List<serviceTBL> _a = new();
+
+                private static int Cmp(serviceTBL a, serviceTBL b)
+                {
+                    int p = a.Priority.CompareTo(b.Priority);         // Higher priority first
+                    return p != 0 ? p : a.CreatedUtc.CompareTo(b.CreatedUtc); // Newer first
+                }
+
                 public int Count => _a.Count;
 
                 public void Push(serviceTBL x)
                 {
                     _a.Add(x);
-                    for (int i = _a.Count - 1; i > 0;)
-                    {
-                        int p = (i - 1) / 2;
-                        if (Cmp(_a[i], _a[p]) <= 0) break;
-                        (_a[i], _a[p]) = (_a[p], _a[i]); i = p;
-                    }
+                    SiftUp(_a.Count - 1);
                 }
 
                 public serviceTBL Pop()
                 {
-                    var top = _a[0];
-                    _a[0] = _a[^1];
-                    _a.RemoveAt(_a.Count - 1);
-                    for (int i = 0; ;)
-                    {
-                        int l = 2 * i + 1, r = l + 1, b = i;
-                        if (l < _a.Count && Cmp(_a[l], _a[b]) > 0) b = l;
-                        if (r < _a.Count && Cmp(_a[r], _a[b]) > 0) b = r;
-                        if (b == i) break;
-                        (_a[i], _a[b]) = (_a[b], _a[i]); i = b;
+                    if (_a.Count == 0)
+                    { 
+                        throw new InvalidOperationException("Heap is empty."); 
                     }
-                    return top;
+
+                    //chat gpt helped me with the logic for popping from a max heap
+                    var top = _a[0]; //store top value to return later
+                    _a[0] = _a[^1]; //move last element to top
+                    _a.RemoveAt(_a.Count - 1); //remove last element (duplicate as it is not at the top of the heap)
+                    if (_a.Count > 0) SiftDown(0); //sift down new top element to maintain heap priority
+                    return top; //return original top value
                 }
 
-                public IEnumerable<serviceTBL> PeekMany(int n)
+                //method that returns the top n elements from the max heap without removing them
+                public List<serviceTBL> PeekMany(int n)
                 {
-                    var temp = new List<serviceTBL>();
-                    while (Count > 0 && temp.Count < n) temp.Add(Pop());
-                    foreach (var x in temp) yield return x;   // emit
-                    foreach (var x in temp) Push(x);          // restore
+                    var taken = new List<serviceTBL>(Math.Min(n, _a.Count));
+                    while (taken.Count < n && _a.Count > 0) taken.Add(Pop());
+                    foreach (var x in taken) Push(x); //restores heap
+                    return taken;
                 }
 
-                private static int Cmp(serviceTBL a, serviceTBL b)
+                //methods for sifting up and down in the max heap (helps maintain rule that parent must be greater than children)
+                //chat gpt assisted me with the logic for these sifting methods
+                private void SiftUp(int i)
                 {
-                    int p = a.Priority.CompareTo(b.Priority);     // higher priority first
-                    if (p != 0) return p;
-                    return a.CreatedUtc.CompareTo(b.CreatedUtc);  // newer first
+                    while (i > 0)
+                    {
+                        int p = (i - 1) / 2;
+                        if (Cmp(_a[i], _a[p]) <= 0) break;
+                        (_a[i], _a[p]) = (_a[p], _a[i]);
+                        i = p;
+                    }
+                }
+
+                //methods for sifting up and down in the max heap (helps maintain rule that parent must be greater than children)
+                //chat gpt assisted me with the logic for these sifting methods
+                private void SiftDown(int i)
+                {
+                    while (true)
+                    {
+                        int l = 2 * i + 1, r = l + 1, best = i;
+                        if (l < _a.Count && Cmp(_a[l], _a[best]) > 0) best = l;
+                        if (r < _a.Count && Cmp(_a[r], _a[best]) > 0) best = r;
+                        if (best == i) break;
+                        (_a[i], _a[best]) = (_a[best], _a[i]);
+                        i = best;
+                    }
                 }
             }
 
             private readonly MaxHeap _heap = new();
 
-            // ------------------ Graph (same-status edges) ------------------
+            // ==== Graph ==============================================
             private readonly Dictionary<int, HashSet<int>> _adj = new();
 
+            //method that adds an undirected edge between two service request IDs in the graph
             private void AddEdge(int a, int b)
             {
                 (_adj.TryGetValue(a, out var sa) ? sa : _adj[a] = new()).Add(b);
                 (_adj.TryGetValue(b, out var sb) ? sb : _adj[b] = new()).Add(a);
             }
 
-            // ------------------ Build & Queries ------------------
+            // ==== Build & Queries =========================================================
+            //chat gpt assisted me with the logic for building the index from the list of service requests
             public static SimpleRequestIndex Build(IEnumerable<serviceTBL> all)
             {
                 var idx = new SimpleRequestIndex();
@@ -234,12 +263,11 @@ namespace PROG7312_POE.Services.Implementation
                     idx._heap.Push(s);
                 }
 
-                // Simple "related" rule: connect items with the same Status.
-                var byStatus = all.GroupBy(s => s.Status);
-                foreach (var group in byStatus)
+                // connect items sharing the same Status
+                foreach (var group in all.GroupBy(s => s.Status))
                 {
                     var ids = group.Select(x => x.ServiceID).ToList();
-                    for (int i = 0; i < ids.Count; i++)
+                    for (int i = 0; i + 1 < ids.Count; i++)
                         for (int j = i + 1; j < ids.Count; j++)
                             idx.AddEdge(ids[i], ids[j]);
                 }
@@ -247,12 +275,19 @@ namespace PROG7312_POE.Services.Implementation
                 return idx;
             }
 
-            public List<serviceTBL> TopUrgent(int count) => _heap.PeekMany(count).ToList();
+            // method that returns the top n urgent service requests from the max heap
+            public Task<List<serviceTBL>> TopUrgent(int count)
+            {
+                List<serviceTBL> result = _heap.PeekMany(count);
+                return Task.FromResult(result);
+            }
 
+            //method that returns related service request IDs using BFS on the graph with a max limit of 15 related IDs
+            //chat gpt assisted me with the logic for the BFS traversal
             public List<int> RelatedIds(int startId, int max = 15)
             {
                 var result = new List<int>();
-                if (!_adj.ContainsKey(startId)) return result;
+                if (!_adj.TryGetValue(startId, out var _)) return result;
 
                 var q = new Queue<int>();
                 var seen = new HashSet<int> { startId };
@@ -263,12 +298,10 @@ namespace PROG7312_POE.Services.Implementation
                     var v = q.Dequeue();
                     foreach (var n in _adj[v])
                     {
-                        if (seen.Add(n))
-                        {
-                            result.Add(n);
-                            q.Enqueue(n);
-                            if (result.Count >= max) break;
-                        }
+                        if (!seen.Add(n)) continue;
+                        result.Add(n);
+                        if (result.Count >= max) break;
+                        q.Enqueue(n);
                     }
                 }
                 return result;

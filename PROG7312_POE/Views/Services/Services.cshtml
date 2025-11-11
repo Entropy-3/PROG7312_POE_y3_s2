@@ -1,6 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Page Under Construction";
-    var name = Context.Session.GetString("UserName");
+﻿@using PROG7312_POE.Models
+@model List<serviceTBL>
+
+@{
+    ViewData["Title"] = "Service Requests";
+    var name = (string?)ViewBag.UserName ?? "there";
+    var topUrgent = ViewBag.TopUrgent as List<serviceTBL> ?? new List<serviceTBL>();
+
+    int total = Model?.Count ?? 0;
+    int openCount = Model?.Count(x => x.Status == RequestStatus.New
+                                   || x.Status == RequestStatus.Acknowledged
+                                   || x.Status == RequestStatus.InProgress) ?? 0;
+    int resolvedCount = Model?.Count(x => x.Status == RequestStatus.Resolved
+                                       || x.Status == RequestStatus.Closed) ?? 0;
 }
 
 <head>
@@ -8,89 +19,311 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
             color: #fff;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 40px auto 80px;
+            padding: 0 20px;
         }
 
         .header {
-            background-color: rgba(0, 191, 255, 0.15);
-            padding: 20px;
-            text-align: center;
-            font-size: 32px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            background: rgba(0,191,255,.15);
+            padding: 18px 22px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,.4);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
             color: #00bfff;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin: 0;
         }
 
-        .subheader {
-            text-align: center;
-            margin: 15px;
-            font-size: 18px;
-            color: rgba(255,255,255,0.7);
+        .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,.8);
+            margin: 0;
         }
 
-        .construction-container {
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 40px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-        }
-
-            .construction-container h2 {
-                font-size: 28px;
-                color: #00bfff;
-                margin-bottom: 20px;
-            }
-
-            .construction-container p {
-                font-size: 16px;
-                color: rgba(255,255,255,0.8);
-                margin-bottom: 30px;
-                line-height: 1.5;
-            }
-
-        .back-link {
-            background-color: #00bfff;
+        .btn {
+            background: #00bfff;
             color: #fff;
-            padding: 12px 20px;
+            border: 0;
             border-radius: 10px;
+            padding: 10px 16px;
             text-decoration: none;
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            cursor: pointer;
         }
 
-            .back-link:hover {
-                background-color: #00bfff96;
+            .btn:hover {
+                background: #00bfff96;
             }
 
-        .icon {
-            font-size: 50px;
-            margin-bottom: 15px;
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 14px;
+            margin: 18px 0 24px;
+        }
+
+        .card {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.5);
+            padding: 18px;
+        }
+
+        .kpi-title {
+            font-size: 13px;
+            color: rgba(255,255,255,.7);
+            margin: 0 0 6px;
+        }
+
+        .kpi-value {
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .search-card form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+
+        .input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,.08);
+            background: rgba(255,255,255,.03);
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 14px;
+        }
+
+        .section-title {
+            color: #00bfff;
+            font-size: 18px;
+            margin: 0 0 10px;
+        }
+
+        .urgent-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 10px;
+        }
+
+        .urgent-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,.12);
+        }
+
+        .prio-Critical {
+            background: rgba(255,77,77,.15);
+            color: #ff6b6b;
+        }
+
+        .prio-High {
+            background: rgba(255,170,51,.15);
+            color: #ffb74d;
+        }
+
+        .prio-Medium {
+            background: rgba(0,191,255,.15);
+            color: #00bfff;
+        }
+
+        .prio-Low {
+            background: rgba(144,238,144,.15);
+            color: #7ad57a;
+        }
+
+        .status-chip {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            color: rgba(255,255,255,.9);
+            background: rgba(255,255,255,.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 12px;
+            letter-spacing: .5px;
+            color: rgba(255,255,255,.65);
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+        }
+
+        tbody td {
+            padding: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,.07);
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,.03);
+        }
+
+        .link {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(255,255,255,.25);
+        }
+
+            .link:hover {
+                color: #00bfff;
+                border-bottom-color: #00bfff;
+            }
+        @@media (max-width:980px) {
+            .kpis,.actions,.content
+
+        {
+            grid-template-columns: 1fr;
+        }
+
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        Community Hub
-    </div>
-    <div class="subheader">
-        Hello @name, this page isn’t ready yet.
-    </div>
+    <div class="page">
+        <div class="header">
+            <div>
+                <h1 class="title">Service Requests</h1>
+                <p class="subtitle">Hi @name — create, search, and monitor service requests.</p>
+            </div>
+            <a class="btn" asp-controller="Services" asp-action="AddService">+ New Request</a>
+        </div>
 
-    <div class="construction-container">
-        <div class="icon">🚧</div>
-        <h2>Page Under Construction</h2>
-        <p>
-            We’re working hard to bring you this feature. Please check back soon —
-            exciting things are on the way!
-        </p>
-        <a class="back-link" href="@Url.Action("Index", "Home")">Back to Home</a>
+        <div class="kpis">
+            <div class="card"><p class="kpi-title">Open</p><p class="kpi-value">@openCount</p></div>
+            <div class="card"><p class="kpi-title">Resolved / Closed</p><p class="kpi-value">@resolvedCount</p></div>
+            <div class="card"><p class="kpi-title">Total</p><p class="kpi-value">@total</p></div>
+        </div>
+
+        <div class="actions">
+            <div class="card search-card">
+                <h3 class="section-title">Track by ID</h3>
+                <form method="get" asp-controller="Services" asp-action="Track">
+                    <input class="input" type="number" name="id" placeholder="Enter Service ID (e.g., 1023)" required />
+                    <button class="btn" type="submit">Jump to Request</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title">Quick Filter</h3>
+                <form method="get" asp-controller="Services" asp-action="Services" style="display:grid; grid-template-columns: 1fr auto; gap:10px;">
+                    <select name="status" class="input" aria-label="Filter by status">
+                        <option value="">Filter by status (all)</option>
+                        @foreach (var s in Enum.GetValues<RequestStatus>())
+                        {
+                            <option value="@s">@s</option>
+                        }
+                    </select>
+                    <button class="btn" type="submit">Apply</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="content">
+            <section class="card">
+                <h3 class="section-title">Top Urgent</h3>
+                @if (!topUrgent.Any())
+                {
+                    <p class="subtitle">No urgent items right now.</p>
+                }
+                else
+                {
+                    <ul class="urgent-list">
+                        @foreach (var r in topUrgent)
+                        {
+                            var prioClass = "prio-" + r.Priority.ToString();
+                            <li class="urgent-item">
+                                <span class="badge @prioClass">@r.Priority</span>
+                                <div>
+                                    <a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.Title</a>
+                                    <div class="subtitle">ID: @r.ServiceID • @r.CreatedUtc.ToLocalTime()</div>
+                                </div>
+                                <span class="status-chip">@r.Status</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+
+            <section class="card">
+                <h3 class="section-title">Latest</h3>
+                @if (!Model.Any())
+                {
+                    <p class="subtitle">No requests yet. Create your first one.</p>
+                }
+                else
+                {
+                    <div style="overflow-x:auto;">
+                        <table role="table" aria-label="Latest service requests">
+                            <thead>
+                                <tr><th>ID</th><th>Title</th><th>Priority</th><th>Status</th><th>Created</th><th></th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var r in Model)
+                                {
+                                    var prioClass = "prio-" + r.Priority.ToString();
+                                    <tr>
+                                        <td><a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.ServiceID</a></td>
+                                        <td>@r.Title</td>
+                                        <td><span class="badge @prioClass">@r.Priority</span></td>
+                                        <td><span class="status-chip">@r.Status</span></td>
+                                        <td>@r.CreatedUtc.ToLocalTime()</td>
+                                        <td><a class="btn" style="padding:6px 10px;" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="subtitle" style="margin-top:10px;">Open a row to see “Related” (Graph BFS) on the Track page.</p>
+                }
+            </section>
+        </div>
     </div>
 </body>

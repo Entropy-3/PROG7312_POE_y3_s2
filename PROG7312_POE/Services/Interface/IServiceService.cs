@@ -6,9 +6,9 @@ namespace PROG7312_POE.Services.Interface
     {
         Task<serviceTBL?> AddServiceAsync(serviceTBL service);
         Task<List<serviceTBL>> GetAllServicesAsync();
-
-        // Handy extras for your tracking page / actions:
         Task<serviceTBL?> GetByIdAsync(int id);
         Task<bool> AdvanceStatusAsync(int id, RequestStatus next);
+        Task<List<serviceTBL>> GetTopUrgentAsync(int count = 10);
+        Task<List<serviceTBL>> GetRelatedAsync(int id);
     }
 }
