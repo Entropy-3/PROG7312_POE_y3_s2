@@ -25,6 +25,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IIssuesService, IssuesService>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 
 var app = builder.Build();
 

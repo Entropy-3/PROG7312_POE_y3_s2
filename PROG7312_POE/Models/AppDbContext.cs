@@ -10,6 +10,7 @@ namespace PROG7312_POE.Models
         public DbSet<issueTBL> Issues { get; set; }
         public DbSet<eventTBL> Events { get; set; }
         public DbSet<announcementTBL> Announcements { get; set; }
+        public DbSet<serviceTBL> Services { get; set; }
     }
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EOF~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
