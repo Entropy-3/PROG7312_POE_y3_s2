@@ -64,6 +64,7 @@ namespace PROG7312_POE.Controllers
 
             HttpContext.Session.SetInt32("UserID", user.UserID);
             HttpContext.Session.SetString("UserName", user.Name);
+            HttpContext.Session.SetString("UserRole", user.Role);
 
             return RedirectToAction("Index", "Home");
         }

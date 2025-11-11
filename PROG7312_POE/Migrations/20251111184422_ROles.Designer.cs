@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROG7312_POE.Models;
 
@@ -10,9 +11,11 @@ using PROG7312_POE.Models;
 namespace PROG7312_POE.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251111184422_ROles")]
+    partial class ROles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
@@ -120,12 +123,7 @@ namespace PROG7312_POE.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ServiceID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Services");
                 });
@@ -162,17 +160,6 @@ namespace PROG7312_POE.Migrations
                 });
 
             modelBuilder.Entity("PROG7312_POE.Models.issueTBL", b =>
-                {
-                    b.HasOne("PROG7312_POE.Models.userTBL", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PROG7312_POE.Models.serviceTBL", b =>
                 {
                     b.HasOne("PROG7312_POE.Models.userTBL", "User")
                         .WithMany()

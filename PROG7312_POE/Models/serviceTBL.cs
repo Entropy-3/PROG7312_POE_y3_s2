@@ -14,6 +14,10 @@ namespace PROG7312_POE.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ServiceID { get; set; }
 
+        [ForeignKey("User")]
+        public int UserID { get; set; }
+        public userTBL? User { get; set; }
+
         [Required]
         public string Title{ get; set; }
 

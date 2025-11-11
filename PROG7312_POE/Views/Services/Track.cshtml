@@ -213,18 +213,6 @@
                         <div class="meta-v"><span class="status-chip">@Model.Status</span></div>
                     </div>
                 </div>
-
-                <div style="margin-top:16px;">
-                    <form asp-controller="Services" asp-action="AdvanceStatus" method="post" style="display:grid; grid-template-columns: 1fr auto; gap:10px; align-items:end;">
-                        <input type="hidden" name="id" value="@Model.ServiceID" />
-                        <div>
-                            <label for="next" class="meta-k">Update Status</label>
-                            <select id="next" name="next" asp-items="Html.GetEnumSelectList<RequestStatus>()" class="input"></select>
-                        </div>
-                        <button class="btn" type="submit">Save</button>
-                        @Html.AntiForgeryToken()
-                    </form>
-                </div>
             </section>
 
             <aside class="card">

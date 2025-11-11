@@ -1,6 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Landing Page";
     var name = Context.Session.GetString("UserName");
+    var role = Context.Session.GetString("UserRole") ?? "non-admin";
+    var statusHref = role == "admin"
+        ? Url.Action("Admin", "Services")
+        : Url.Action("Services", "Services");
 }
 
 <head>
@@ -104,7 +108,7 @@
         <div class="card">
             <h2>Service Request Status</h2>
             <p>Check the progress and current status of your submitted service requests and reports.</p>
-            <a href="@Url.Action("Services", "Services")">Check</a>
+            <a href="@statusHref">Check</a>
         </div>
     </div>
 </body>

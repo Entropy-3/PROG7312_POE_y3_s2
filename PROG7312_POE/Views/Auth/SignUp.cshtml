@@ -190,6 +190,14 @@
                 <span>Password</span>
             </label>
 
+            <label>
+                <select class="input" name="Role" required>
+                    <option value="non-admin" selected>Non-Admin</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <span>User Role</span>
+            </label>
+
             <button class="submit">Submit</button>
             <p class="signin">have an account? <a href="@Url.Action("Login", "Auth")">Login</a> </p>
         </form>

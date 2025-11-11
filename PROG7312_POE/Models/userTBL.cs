@@ -14,6 +14,9 @@ namespace PROG7312_POE.Models
         public string Name { get; set; }
 
         [Required]
+        public string Role { get; set; }
+
+        [Required]
         public string Surname { get; set; }
 
         [Required]
