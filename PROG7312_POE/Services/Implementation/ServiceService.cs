@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PROG7312_POE.Models;
 using PROG7312_POE.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PROG7312_POE.Services.Implementation
 {
