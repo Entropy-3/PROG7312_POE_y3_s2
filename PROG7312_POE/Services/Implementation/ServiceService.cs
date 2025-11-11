@@ -13,7 +13,7 @@ namespace PROG7312_POE.Services.Implementation
             _context = context;
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Create service request
         public async Task<serviceTBL?> AddServiceAsync(serviceTBL service)
         {
@@ -34,7 +34,7 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Get all service requests
         public async Task<List<serviceTBL>> GetAllServicesAsync()
         {
@@ -51,7 +51,7 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Get by ID (BST lookup built from current data)
         public async Task<serviceTBL?> GetByIdAsync(int id)
         {
@@ -68,7 +68,7 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Advance status
         public async Task<bool> AdvanceStatusAsync(int id, RequestStatus next)
         {
@@ -88,7 +88,7 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Top urgent list (Max-Heap)
         public async Task<List<serviceTBL>> GetTopUrgentAsync(int count = 10)
         {
@@ -106,7 +106,7 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
-        // ---------------------------------------------------------------------
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // Related requests (Graph BFS)
         public async Task<List<serviceTBL>> GetRelatedAsync(int id)
         {
@@ -124,9 +124,11 @@ namespace PROG7312_POE.Services.Implementation
             }
         }
 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // SimpleRequestIndex: BST, Max-Heap, Graph
         private sealed class SimpleRequestIndex
         {
-            // ------------------ BST (by ServiceID) ------------------
+            //BST (by ServiceID)
             private sealed class BstNode
             {
                 public int K; public serviceTBL V;
@@ -162,7 +164,8 @@ namespace PROG7312_POE.Services.Implementation
                 v = null; return false;
             }
 
-            // ==== Max-Heap (priority then recency) =======================================
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //Max-Heap
             //heap implemented using arrays
             private sealed class MaxHeap
             {
@@ -237,7 +240,8 @@ namespace PROG7312_POE.Services.Implementation
 
             private readonly MaxHeap _heap = new();
 
-            // ==== Graph ==============================================
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            //Graph 
             private readonly Dictionary<int, HashSet<int>> _adj = new();
 
             //method that adds an undirected edge between two service request IDs in the graph
@@ -247,7 +251,8 @@ namespace PROG7312_POE.Services.Implementation
                 (_adj.TryGetValue(b, out var sb) ? sb : _adj[b] = new()).Add(a);
             }
 
-            // ==== Build & Queries =========================================================
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            // Build & Queries
             //chat gpt assisted me with the logic for building the index from the list of service requests
             public static SimpleRequestIndex Build(IEnumerable<serviceTBL> all)
             {
