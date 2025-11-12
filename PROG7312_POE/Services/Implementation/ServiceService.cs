@@ -40,9 +40,7 @@ namespace PROG7312_POE.Services.Implementation
         {
             try
             {
-                return await _context.Services
-                    .OrderByDescending(s => s.CreatedUtc)
-                    .ToListAsync();
+                return await _context.Services.OrderByDescending(s => s.CreatedUtc).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -205,7 +203,7 @@ namespace PROG7312_POE.Services.Implementation
                 {
                     var taken = new List<serviceTBL>(Math.Min(n, _a.Count));
                     while (taken.Count < n && _a.Count > 0) taken.Add(Pop());
-                    foreach (var x in taken) Push(x); //restores heap
+                    foreach (var x in taken) Push(x);
                     return taken;
                 }
 

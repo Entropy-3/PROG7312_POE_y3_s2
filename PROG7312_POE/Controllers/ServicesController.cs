@@ -38,7 +38,6 @@ namespace PROG7312_POE.Controllers
             }
 
             ViewBag.TopUrgent = urgent;
-            ViewBag.UserName = HttpContext.Session.GetString("UserName") ?? "there";
             return View(all);
         }
 

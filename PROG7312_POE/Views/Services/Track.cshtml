@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = $"Service #{Model.ServiceID}";
     var related = ViewBag.Related as List<serviceTBL> ?? new List<serviceTBL>();
+	//chatgpt assisted me with the helper function that allows my priority badges to work correctly
     string PrioClass(RequestPriority p) => "prio-" + p.ToString();
 }
 
@@ -229,7 +230,7 @@
                             <li class="related-item">
                                 <span class="badge @PrioClass(r.Priority)">@r.Priority</span>
                                 <div>
-                                    <a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.Title</a>
+                                    <span class="link" style="cursor:default;">@r.Title</span>
                                     <div class="subtitle">ID: @r.ServiceID • @r.CreatedUtc.ToLocalTime()</div>
                                 </div>
                                 <span class="status-chip">@r.Status</span>

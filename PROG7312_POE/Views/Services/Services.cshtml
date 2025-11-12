@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Service Requests";
-    var name = (string?)ViewBag.UserName ?? "there";
+    var name = Context.Session.GetString("UserName");
     var topUrgent = ViewBag.TopUrgent as List<serviceTBL> ?? new List<serviceTBL>();
 
     int total = Model?.Count ?? 0;
@@ -282,7 +282,7 @@
                             <li class="urgent-item">
                                 <span class="badge @prioClass">@r.Priority</span>
                                 <div>
-                                    <a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.Title</a>
+                                    <span class="link" style="cursor:default;">@r.Title</span>
                                     <div class="subtitle">ID: @r.ServiceID • @r.CreatedUtc.ToLocalTime()</div>
                                 </div>
                                 <span class="status-chip">@r.Status</span>
@@ -310,7 +310,7 @@
                                 {
                                     var prioClass = "prio-" + r.Priority.ToString();
                                     <tr>
-                                        <td><a class="link" asp-controller="Services" asp-action="Track" asp-route-id="@r.ServiceID">@r.ServiceID</a></td>
+                                        <td>@r.ServiceID</td>
                                         <td>@r.Title</td>
                                         <td><span class="badge @prioClass">@r.Priority</span></td>
                                         <td><span class="status-chip">@r.Status</span></td>
