@@ -14,6 +14,17 @@ Civil Service Portal is your all-in-one platform for staying engaged with your l
 - Summary and confirmation before submitting reports
 - Easy-to-navigate dashboard with cards for each section
 
+- ## 🔧 Tech Stack
+
+### Core
+- [ASP.NET Core MVC 8.0](https://dotnet.microsoft.com/en-us/apps/aspnet)
+- [C# 12](https://learn.microsoft.com/en-us/dotnet/csharp/)
+- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/)
+- [Razor Pages & ViewModels](https://learn.microsoft.com/en-us/aspnet/core/mvc/views/overview)
+
+### Database
+- [SQLite](https://www.sqlite.org/index.html) (local development)
+
 ## Prerequisites
 
 1) Go to this link https://visualstudio.microsoft.com/vs/community/
@@ -66,3 +77,9 @@ HOW TO RUN from command line:
 
 ## Youtube link
 - https://youtu.be/Zj_dUUELUok
+
+## References
+- ChatGPT
+- https://www.youtube.com/watch?v=dYWz6wqvEEs
+- https://www.youtube.com/watch?v=0wPlzMU-k00
+- https://www.youtube.com/watch?v=5OJRqkYbK-4
