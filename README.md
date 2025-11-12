@@ -71,7 +71,7 @@ HOW TO RUN from command line:
 6) type: dotnet run to run the application
 
 ## Youtube link
-- https://youtu.be/Zj_dUUELUok
+- https://youtu.be/pvh3d7j9tl0
 
 ## References
 - ChatGPT
