@@ -14,7 +14,8 @@ Civil Service Portal is your all-in-one platform for staying engaged with your l
 - Summary and confirmation before submitting reports
 - Easy-to-navigate dashboard with cards for each section
 
-- ## 🔧 Tech Stack
+
+## 🔧 Tech Stack
 
 ### Core
 - [ASP.NET Core MVC 8.0](https://dotnet.microsoft.com/en-us/apps/aspnet)
@@ -68,12 +69,6 @@ HOW TO RUN from command line:
 4) open Developer Command Line
 5) type: dotnet build to build the project
 6) type: dotnet run to run the application
-    
-## Roadmap
-
-- Service tracking feature
-
-- Event creation and tracking feature
 
 ## Youtube link
 - https://youtu.be/Zj_dUUELUok
